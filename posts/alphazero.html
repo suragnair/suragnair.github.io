@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fb="http://ogp.me/ns/fb#">
+
+<head>
+  <meta name="generator" content="HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org">
+  <meta property="og:image" content="http://web.stanford.edu/~surag/posts/images/earlygame.png" />
+  <style type="text/css">
+  /* Design Credits: Deepak Pathak and Jon Barron and Abhishek Kar and Saurabh Gupta*/
+  a {
+  color: #1772d0;
+  text-decoration:none;
+  }
+  a:focus, a:hover {
+  color: #f09228;
+  text-decoration:none;
+  }
+  hr {
+      display: block;
+      height: 1px;
+      border: 0;
+      border-top: 1px solid #ccc;
+      margin: 1em 0;
+      padding: 0;
+  }
+  body,td,th {
+    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  heading {
+    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
+    font-size: 19px;
+    font-weight: 1000
+  }
+  strong {
+    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 800
+  }
+  strongred {
+    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
+    color: 'red' ;
+    font-size: 16px
+  }
+  sectionheading {
+    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
+    font-size: 22px;
+    font-weight: 600
+  }
+  
+  /*.gist {max-width:760px;}
+  .gist-file
+  .gist-data {max-width: 100%;}*/
+ 
+  </style>
+  <link rel="shortcut icon" type="image/x-icon" href="http://stanford.edu/favicon.ico">
+  <link rel="mask-icon" href="//www-media.stanford.edu/assets/favicon/safari-pinned-tab.svg" color="#ffffff">
+  <title>Simple Alpha Zero</title>
+  <meta name="Simple Alpha Zero" http-equiv="Content-Type" content="Simple Alpha Zero">
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic' rel='stylesheet' type='text/css'>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-104972113-1"></script>
+  <script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag(){dataLayer.push(arguments);}
+   gtag('js', new Date());
+
+   gtag('config', 'UA-104972113-1');
+  </script>
+  <!-- End : Google Analytics Code -->
+  <!-- MathJax-->
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <!-- End: MathJax-->
+</head>
+
+<body>
+<table width="840" border="0" align="center" border="0" cellspacing="0" cellpadding="20">
+  <tr><td>
+
+<table width="100%" align="center" border="0" cellspacing="0" style="padding-left:20; padding-right:20; padding-bottom:10; padding-top:10">
+  <p align="center"><font size="7">A Simple Alpha(Go) Zero Tutorial</font><br>
+  <font color="646464">29 December 2017  </font>
+  <!-- \( \mid \) Surag Nair & Shantanu Thakoor & Megha Jhunjhunwala -->
+  </p>
+ 
+  <tr><td align="justify">
+  <p> This tutorial walks through a synchronous single-thread single-GPU (read malnourished) game-agnostic implementation of the recent <a href="https://deepmind.com/blog/alphago-zero-learning-scratch/">AlphaGo Zero</a> paper by DeepMind. It's a beautiful piece of work that trains an agent for the game of Go through pure self-play without <i>any</i> human knowledge except the rules of the game. The methods are fairly simple compared to previous papers by DeepMind, and AlphaGo Zero ends up beating AlphaGo (trained using data from expert games and beat the best human Go players) convincingly. Recently, DeepMind published a preprint of <a href="https://arxiv.org/abs/1712.01815">Alpha Zero </a> on arXiv that extends AlphaGo Zero methods to Chess and Shogi. </p>
+      
+<p>The aim of this post is to distil out the key ideas from the AlphaGo Zero paper and understand them concretely through code. It assumes basic familiarity with machine learning and reinforcement learning concepts, and should be accessible if you understand <a href="http://www.neuralnetworksanddeeplearning.com">neural network</a>  basics and <a href="https://web.archive.org/web/20180629082128/http://mcts.ai/index.html">Monte Carlo Tree Search</a>. Before starting out (or after finishing this tutorial), I would recommend reading the <a href="https://www.nature.com/articles/nature24270.epdf?author_access_token=VJXbVjaSHxFoctQQ4p2k4tRgN0jAjWel9jnR3ZoTv0PVW4gB86EEpGqTRDtpIz-2rmo8-KG06gqVobU5NSCFeHILHcVFUeMsbvwS-lxjqQGg98faovwjxeTUgZAUMnRQ">original paper</a>. It's well-written, very readable and has beautiful illustrations! AlphaGo Zero is trained by self-play reinforcement learning. It combines a neural network and Monte Carlo Tree Search in an elegant policy iteration framework to achieve stable learning. But that's just words- let's dive into the details straightaway.
+  </p>
+  
+  <sectionheading>The Neural Network</sectionheading>
+  <p> Unsurprisingly, there's a neural network at the core of things. The neural network \( f_\theta \) is parameterised by \( \theta \) and takes as input the state \(s\) of the board. It has two outputs: a continuous value of the board state \(v_\theta(s) \in [-1,1]\) from the perspective of the current player, and a policy \(\vec{p}_\theta(s)\) that is a probability vector over all possible actions.
+  </p>
+  <p> When training the network, at the end of each game of self-play, the neural network is provided training examples of the form \( (s_t, \vec{\pi}_t, z_t) \). \( \vec{\pi}_t \) is an estimate of the policy from state \(s_t\) (we'll get to how \(\vec{\pi}_t\) is arrived at in the next section), and \(z_t \in \{-1,1\}\) is the final outcome of the game from the perspective of the player at \(s_t\) (+1 if the player wins, -1 if the player loses). The neural network is then trained to minimise the following loss function (excluding regularisation terms):
+
+$$ l = \sum_t (v_\theta(s_t) - z_t)^2 - \vec{\pi}_t \cdot \log(\vec{p}_\theta(s_t)) $$    
+
+The underlying idea is that over time, the network will learn what states eventually lead to wins (or losses). In addition, learning the policy would give a good estimate of what the best action is from a given state. The neural network architecture in general would depend on the game. Most board games such as Go can use a multi-layer CNN architecture. In the paper by DeepMind, they use 20 residual blocks, each with 2 convolutional layers. I was able to get a 4-layer CNN network followed by a few feedforward layers to work for 6x6 Othello.
+  </p>
+  <sectionheading>Monte Carlo Tree Search for Policy Improvement</sectionheading>
+  <p>Given a state \(s\), the neural network provides an estimate of the policy \(\vec{p}_\theta\). During the training phase, we wish to improve these estimates. This is accomplished using a <a href="https://web.archive.org/web/20180629082128/http://mcts.ai/index.html">Monte Carlo Tree Search</a> (MCTS). In the search tree, each node represents a board configuration. A directed edge exists between two nodes \(i \rightarrow j\) if a valid action can cause state transition from state \(i\) to \(j\). Starting with an empty search tree, we expand the search tree one node (state) at a time. When a new node is encountered, instead of performing a rollout, the value of the new node is obtained from the neural network itself. This value is propagated up the search path. Let's sketch this out in more detail.
+  </p>
+  <p>For the tree search, we maintain the following:
+      <ul>
+          <li>\(Q(s,a)\): the expected reward for taking action \(a\) from state \(s\), i.e. the Q values </li> 
+          <li>\(N(s,a)\): the number of times we took action \(a\) from state \(s\) across simulations </li>
+          <li>\(P(s,\cdot)=\vec{p}_\theta(s)\): the initial estimate of taking an action from the state \(s\) according to the policy returned by the current neural network. </li>
+      </ul>
+  
+  From these, we can calculate \(U(s,a)\), the upper confidence bound on the Q-values as
+  $$U(s,a) = Q(s,a) + c_{puct}\cdot P(s,a)\cdot\frac{\sqrt{\Sigma_b N(s,b)}}{1+N(s,a)}$$
+  Here \(c_{puct}\) is a hyperparameter that controls the degree of exploration. To use MCTS to improve the initial policy returned by the current neural network, we initialise our empty search tree with \(s\) as the root. A single simulation proceeds as follows. We compute the action \(a\) that maximises the upper confidence bound \(U(s,a)\). If the next state \(s'\) (obtained by playing action \(a\) on state \(s\)) exists in our tree, we recursively call the search on \(s'\). If it does not exist, we add the new state to our tree and initialise \(P(s',\cdot) = \vec{p}_\theta(s')\) and the value \(v(s') = v_\theta(s')\) from the neural network, and initialise \(Q(s',a)\) and \(N(s',a)\) to 0 for all \(a\). Instead of performing a rollout, we then propagate \(v(s')\) up along the path seen in the current simulation and update all \(Q(s,a)\) values. On the other hand, if we encounter a terminal state, we propagate the actual reward (+1 if player wins, else -1).
+  </p>
+  
+  <p> After a few simulations, the \(N(s,a)\) values at the root provide a better approximation for the policy. The improved stochastic policy \(\vec{\pi}(s)\) is simply the normalised counts \(N(s,\cdot)/\sum_b(N(s,b))\). During self-play, we perform MCTS and pick a move by sampling a move from the improved policy \(\vec{\pi}(s)\). Below is a high-level implementation of one simulation of the search algorithm.
+  </p>
+  <script src="https://gist.github.com/suragnair/3bd7c64fb4b838c4e21d0d490308f621.js"></script>
+  <p> Note that we return the negative value of the state. This is because alternate levels in the search tree are from the perspective of different players. Since \(v \in [-1,1]\), \(-v\) is the value of the current board from the perspective of the other player.
+  </p>
+  <sectionheading>Policy Iteration through Self-Play</sectionheading>
+  <p> Believe it or not, we now have all elements required to train our unsupervised game playing agent! Learning through self-play is essentially a policy iteration algorithm- we play games and compute Q-values using our current policy (the neural network in this case), and then update our policy using the computed statistics.
+  </p>
+  <p>Here is the complete training algorithm. We initialise our neural network with random weights, thus starting with a random policy and value network. In each iteration of our algorithm, we play a number of games of self-play. In each turn of a game, we perform a fixed number of MCTS simulations starting from the current state \(s_t\). We pick a move by sampling from the improved policy \(\vec{\pi}_t\). This gives us a training example \((s_t, \vec{\pi}_t, \_)\). The reward \(\_\) is filled in at the end of the game: +1 if the current player eventually wins the game, else -1. The search tree is preserved during a game. 
+  </p>
+  <p> At the end of the iteration, the neural network is trained with the obtained training examples. The old and the new networks are pit against each other. If the new network wins more than a set threshold fraction of games (55% in the DeepMind paper), the network is updated to the new network. Otherwise, we conduct another iteration to augment the training examples.
+  </p>
+  <p>And that's it! Somewhat magically, the network improves almost every iteration and learns to play the game better. The high-level code for the complete training algorithm is provided below.
+  </p>
+  <script src="https://gist.github.com/suragnair/fa6e1935d3b6cf650ac039bf04bc9b13.js"></script>
+  <sectionheading>Experiments with Othello</sectionheading>
+  <p>
+  We trained an agent for the game of Othello for a 6x6 board on a single GPU. Each iteration consisted of 100 episodes of self-play and each MCTS used 25 simulations. Note that this is orders of magnitude smaller than the computation used in the AlphaGo paper (25000 episodes per iteration, 1600 simulations per turn). The model took around 3 days (80 iterations) for training to saturate on an NVIDIA Tesla K80 GPU. We evaluated the model against random and greedy baselines, as well as a minimax agent and humans. It performed pretty well and even picked up some common strategies used by humans.
+ 
+ </p>
+  <figure>
+    <img src="images/earlygame.svg" width="100%">
+    <figcaption align="center">The agent (Black) learns to capture walls and corners in the early game</figcaption>
+  </figure>
+  <figure>
+    <img src="images/lategame.svg" width="100%">
+    <figcaption align="center">The agent (Black) learns to force passes in the late game</figcaption>
+  </figure>
+  
+  <sectionheading>A Note on Details</sectionheading>
+  <p> This post provides an overview of the key ideas in the AlphaGo Zero paper and excludes finer details for the sake of clarity. The AlphaGo paper describes some additional details in their implementation. Some of them are:
+      <ul>
+          <li><b> History of State</b>: Since Go is not completely observable from the current state of the board, the neural network also takes as input the boards from the last 7 time steps. This is a feature of the game itself, and other games such as Chess and Othello would only require the current board as input.</li>
+          <li><b> Temperature</b>: The stochastic policy obtained after performing the MCTS uses exponentiated counts, i.e. \(\vec{\pi}(s) = N(s, \cdot)^{1/\tau}/\sum_b(N(s,b)^{1/\tau}) \), where \(\tau\) is the temperature and controls the degree of exploration. AlphaGo Zero uses \(\tau=1\) (simply the normalised counts) for the first 30 moves of each game, and then sets it to an infinitesimal value (picking the move with the maximum counts). </li>
+          <li><b> Symmetry</b>: The Go board is invariant to rotation and reflection. When MCTS reaches a leaf node, the current neural network is called with a reflected or rotated version of the board to exploit this symmetry. In general, this can be extended to other games using symmetries that hold for the game.</li>
+          <!--<li><b> Early Stopping</b>: </li>-->
+          <li><b> Asynchronous MCTS</b>:  AlphaGo Zero uses an asynchronous variant of MCTS that performs the simulations in parallel. The neural network queries are batched and each search thread is locked until evaluation completes. In addition, the 3 main processes: self-play, neural network training and comparison between old and new networks are all done in parallel.</li>
+          <li><b> Compute Power</b>: Each neural network was trained using 64 GPUs and 19 CPUs. The compute power used for executing the self-play in unclear from the paper.</li>
+          <!--<li><b> Dirichlet Noise</b>: </li>-->          
+           <li><b> Neural Network Design</b>: The authors tried a variety of architectures including networks with and without residual networks, and with and without parameter sharing for the value and policy networks. Their best architecture used residual networks and shared the parameters for the value and policy networks.</li>
+      </ul>
+  </p>
+  
+  <p>This code presented in this tutorial provides a high-level overview of the algorithms involved. A complete game and framework independent implementation can be found in this <a href="https://github.com/suragnair/alpha-zero-general">GitHub repo</a>. It contains an example implementation for the game of Othello in PyTorch, Keras and TensorFlow.</p>
+  
+  <p> The comments thread below is not very active anymore. Feel free to leave comments/suggestions :). For burning questions, consider posting an <a href="https://github.com/suragnair/alpha-zero-general/issues">Issue</a> on GitHub.
+  </td></tr>
+ 
+</table>
+<hr/>
+
+<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+var disqus_config = function () {
+this.page.url = 'http://web.stanford.edu/~surag/posts/alphazero.html'; 
+this.page.identifier = 'alphazero';
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://web-stanford-edu-surag.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</table>
+
+<hr/>
+<table width="100%" align="center" border="0" cellspacing="0" style="padding-left:20; padding-right:20; padding-bottom:20; padding-top:0">    
+    <tr>
+        <td width="50%">                        
+        <p align="left" style="line-height:2"><font size="2"> <a href="http://web.stanford.edu/~surag/snair.pdf"> <img src="../images/cv.png" height="25%"></a> &nbsp; <a href="https://github.com/suragnair/"><img src="../images/github.png" height="25%"></a> &nbsp; <a href="https://www.quora.com/profile/Surag-Nair"><img src="../images/quora.png" height="25%"></a> &nbsp; <a href="http://instagram.com/surag.nair/"><img src="../images/instagram.png" height="25%"></a>
+        </p>
+        </td>        
+        <td width="50%" valign="middle"><p align="right"><font size="2">
+    <a href="../"><font size="3" color="646464">Surag Nair </font></a> 
+    </font></p></td>
+    </tr>
+</table>
+
+  </td></tr>
+</table>
+</body>
+
+</html>
+
