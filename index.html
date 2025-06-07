@@ -1,163 +1,244 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <meta name="generator" content="HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org">
-  <style type="text/css">
-  /* Design Credits: Deepak Pathak and Jon Barron and Abhishek Kar and Saurabh Gupta*/
-  a {
-  color: #1772d0;
-  text-decoration:none;
-  }
-  a:focus, a:hover {
-  color: #f09228;
-  text-decoration:none;
-  }
-  body,td,th {
-    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
-    font-size: 16px;
-    font-weight: 400
-  }
-  heading {
-    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
-    font-size: 19px;
-    font-weight: 1000
-  }
-  strong {
-    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
-    font-size: 16px;
-    font-weight: 800
-  }
-  strongred {
-    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
-    color: 'red' ;
-    font-size: 16px
-  }
-  sectionheading {
-    font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
-    font-size: 22px;
-    font-weight: 600
-  }
-  </style>
-  <!-- <link rel="shortcut icon" type="image/x-icon" href="http://stanford.edu/favicon.ico"> -->
+  <!-- Basic Page Needs -->
+  <meta charset="utf-8">
+  <title>Surag Nair</title>
+  <meta name="description" content="Surag Nair's personal homepage.">
+  <meta name="author" content="Surag Nair">
+
+  <!-- Mobile Specific Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT -->
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic' rel='stylesheet' type='text/css'>
+
+  <!-- CSS -->
+  <style>
+    /* Basic Page Styles */
+    body {
+      font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* Links */
+    a {
+      color: #1772d0;
+      text-decoration: none;
+    }
+
+    a:focus,
+    a:hover {
+      color: #f09228;
+      text-decoration: none;
+    }
+
+    /* Page Structure */
+    .container {
+      max-width: 840px;
+      margin: 0 auto;
+      /* --- ADJUSTABLE: This now controls the overall content width --- */
+      /* Top, Left/Right, Bottom padding */
+      padding: 20px 350px 40px; 
+    }
+
+    /* Typography */
+    p {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    h1, h2 {
+      font-weight: 600;
+      margin-top: 0;
+    }
+    h1 {
+      /* --- ADJUSTABLE PARAMETER: Title font size --- */
+      font-size: 3.2rem; 
+      
+      font-weight: 400;
+      letter-spacing: -1px;
+      
+      /* --- ADJUSTABLE PARAMETER: Space below title --- */
+      margin-bottom: -3px ; 
+    }
+    .section-heading {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    strong {
+      font-weight: 800;
+    }
+    
+    /* Header Section */
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-header p {
+      line-height: 1.4;
+      margin-bottom: 0;
+    }
+    .social-links {
+      /* --- ADJUSTABLE PARAMETER: Vertical space BETWEEN email and icons --- */
+      margin-top: 15px; 
+    }
+    .social-links .icon-img {
+      /* --- ADJUSTABLE PARAMETER: Icon size --- */
+      height: 18px; 
+      
+      opacity: 0.7;
+      
+      /* --- ADJUSTABLE PARAMETER: Space between icons --- */
+      margin: 0 1px; 
+      
+      transition: opacity 0.2s ease-in-out;
+    }
+    .social-links a:hover .icon-img {
+        opacity: 1.0;
+    }
+
+    /* Profile Section (Bio + Photo) */
+    .profile-section {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin-bottom: 20px;
+    }
+    .profile-text {
+      flex: 1;
+      text-align: justify;
+      /* Padding is now handled by the .container */
+    }
+    .profile-image {
+      flex-basis: 30%;
+    }
+    .profile-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    /* Updates Section */
+    .updates-list {
+      list-style-type: none;
+      padding-left: 0; /* Changed from padding: 0 20px */
+    }
+    .updates-list li {
+      margin-bottom: 15px;
+    }
+    .updates-list .date {
+      color: #646464;
+      display: inline;
+      margin-right: 8px;
+    }
+    .updates-list .date::after {
+        content: ":";
+    }
+
+    /* Footer */
+    .page-footer {
+      text-align: right;
+      font-size: 13px;
+      color: #888;
+      margin-top: 40px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+    
+    /* Responsive Design for Mobile */
+    @media (max-width: 768px) {
+      .container {
+        /* Use less horizontal padding on small screens */
+        padding: 20px 20px 40px;
+      }
+      .profile-section {
+        flex-direction: column;
+        text-align: left;
+      }
+      h1 {
+        font-size: 2.8rem;
+      }
+    }
+   </style>
+
+  <!-- Favicon and Scripts -->
   <link rel="mask-icon" href="//www-media.stanford.edu/assets/favicon/safari-pinned-tab.svg" color="#ffffff">
   <script type="text/javascript" src="js/hidebib.js"></script>
-  <title>Surag Nair</title>
-  <meta name="Surag's Homepage" http-equiv="Content-Type" content="Surag's Homepage">
-  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic' rel='stylesheet' type='text/css'>
-  <!-- Google tag (gtag.js) -->
+  <script src="js/scramble.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-0F2H6Z6HGL"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-0F2H6Z6HGL');
   </script>
-  <!-- Scramble Script by Jeff Donahue -->
-  <script src="js/scramble.js"></script>
 </head>
 
 <body>
-<table width="840" border="0" align="center" border="0" cellspacing="0" cellpadding="20">
-  <tr><td>
 
-<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
-  <p align="center"><font size="7">Surag Nair</font><br>
-    <b>Email</b>:
-    <font id="email" style="display:inline;">
-      <noscript><i>Please enable Javascript to view</i></noscript>
-    </font>
-    <script>
-    emailScramble = new scrambledString(document.getElementById('email'),
-        'emailScramble', '.rgaguia.4sla@9icormmn',
-        [9,8,13,15,4,1,16,6,18,11,0,17,3,12,10,7,19,20,2,14,21,5]);
-    </script>
-  </p>
+  <div class="container">
 
-       <style>
-           .icon-img {
-               height: 18px; /* Adjust this value to match the desired size in Safari */
-               opacity: 0.7; /* This makes all icons slightly transparent, adjust as needed */
-               margin-right: -5px; 
-           }
-           /* If you want a specific icon to have different opacity, you can override it like this: */
-           .cv-icon {
-               opacity: 1; /* This will make the CV icon fully opaque */
-           }
-       </style>
+    <header class="page-header">
+      <h1>Surag Nair</h1>
+      <p>
+        <strong>Email</strong>:
+        <span id="email" style="display:inline;">
+          <noscript><i>Please enable Javascript to view</i></noscript>
+        </span>
+        <script>
+          emailScramble = new scrambledString(document.getElementById('email'), 'emailScramble', '.rgaguia.4sla@9icormmn', [9, 8, 13, 15, 4, 1, 16, 6, 18, 11, 0, 17, 3, 12, 10, 7, 19, 20, 2, 14, 21, 5]);
+        </script>
+      </p>
 
-       <p align="center">
-           <a href="https://suragnair.github.io/snair.pdf">
-               <img src="images/cv.png" class="icon-img cv-icon">
-           </a> &nbsp;
-           <a href="https://www.linkedin.com/in/surag-nair-0b0597ab/">
-               <img src="images/linkedin.png" class="icon-img">
-           </a> &nbsp;
-           <a href="https://scholar.google.co.in/citations?user=anc4v98AAAAJ&hl=en">
-               <img src="images/scholar.png" class="icon-img">
-           </a> &nbsp;
-           <a href="https://github.com/suragnair/">
-               <img src="images/github.png" class="icon-img">
-           </a> &nbsp;
-           <a href="https://twitter.com/suragnair">
-               <img src="images/x.png" class="icon-img">
-           </a> &nbsp;
-           <a href="http://instagram.com/surag.nair/">
-               <img src="images/instagram.png" class="icon-img">
-           </a>
-       </p>
+      <p class="social-links">
+        <a href="https://suragnair.github.io/snair.pdf" title="CV"><img src="images/cv.png" class="icon-img" alt="CV icon"></a>
+        <a href="https://www.linkedin.com/in/surag-nair-0b0597ab/" title="LinkedIn"><img src="images/linkedin.png" class="icon-img" alt="LinkedIn icon"></a>
+        <a href="https://scholar.google.co.in/citations?user=anc4v98AAAAJ&hl=en" title="Google Scholar"><img src="images/scholar.png" class="icon-img" alt="Google Scholar icon"></a>
+        <a href="https://github.com/suragnair/" title="GitHub"><img src="images/github.png" class="icon-img" alt="GitHub icon"></a>
+        <a href="https://twitter.com/suragnair" title="Twitter/X"><img src="images/x.png" class="icon-img" alt="Twitter/X icon"></a>
+        <a href="http://instagram.com/surag.nair/" title="Instagram"><img src="images/instagram.png" class="icon-img" alt="Instagram icon"></a>
+      </p>
+    </header>
 
-  <tr>
-    <td width="67%" valign="middle" align="justify">
-    <p>I am a Senior ML Scientist at <a href="https://www.gene.com">Genentech</a>. I am interested in building models to predict cellular behaviour. I completed my PhD in Computer Science at <a href="http://www.stanford.edu/">Stanford University</a>, working on single-cell epigenomics and deep learning models for chromatin accessibility in the lab of <a href="https://sites.google.com/site/anshulkundaje/">Anshul Kundaje</a>.
+    <main>
+      <section class="profile-section">
+        <div class="profile-text">
+          <p>I am a Senior ML Scientist at <a href="https://www.gene.com">Genentech</a>. I am interested in building models to predict cellular behaviour. I completed my PhD in Computer Science at <a href="http://www.stanford.edu/">Stanford University</a>, working on single-cell epigenomics and deep learning models for chromatin accessibility in the lab of <a href="https://sites.google.com/site/anshulkundaje/">Anshul Kundaje</a>.</p>
+          <p>Previously, I have interned at <a href="http://www.apple.com">Apple</a> in the Siri team, and developed open-source implementations of interesting machine learning systems such as <a href="https://github.com/suragnair/alpha-zero-general">Alpha Zero</a> and <a href="https://github.com/suragnair/seqGAN">sequence GANs</a>. I received my Bachelors in Electrical Engineering from <a href="http://www.iitd.ac.in">IIT Delhi</a>.</p>
+        </div>
+        <div class="profile-image">
+          <img src="images/Chicago_March_21.jpg" alt="Photo of Surag Nair">
+        </div>
+      </section>
+
+      <section id="updates">
+        <h2 class="section-heading">Updates</h2>
+        <ul class="updates-list">
+          <li><span class="date">30 November 2023</span> I defended my PhD! I'm starting as a Senior ML Scientist at Genentech. [<a href="https://purl.stanford.edu/mz621td1032">thesis</a>]</li>
+          <li><span class="date">21 October 2023</span> Our preprint on the single-cell dynamics of fibroblast reprogramming to iPSCs is out! [<a href="https://www.biorxiv.org/content/10.1101/2023.10.04.560808">preprint</a>] [<a href="https://x.com/suragnair/status/1722035473290596627?s=20">tweetorial</a>] [<a href="https://doi.org/10.5281/zenodo.8294147">data</a>] [<a href="https://kundajelab.github.io/reprogramming-browser/home.html">browser</a>] [<a href="https://youtu.be/OwwyAt9yFBo">talk</a>]</li>
+          <li><span class="date">24 July 2023</span> Talk at ISMB 2023 about the sensitivity of regulatory DNA models to spurious features [<a href="https://youtu.be/n3UgOHJ-wHQ">talk</a>]</li>
+          <li><span class="date">14 October 2022</span> dynseq is published in Nature Genetics! [<a href="http://doi.org/10.1038/s41588-022-01194-w">paper</a>]</li>
+          <li><span class="date">8 June 2022</span> dynseq track preprint out, available at UCSC, WashU and HiGlass/Resgen browsers! [<a href="https://www.biorxiv.org/content/10.1101/2022.05.26.493621v2">preprint</a>]</li>
+          <li><span class="date">8 March 2022</span> fastISM is published in Bioinformatics! [<a href="https://doi.org/10.1093/bioinformatics/btac135">paper</a>] [<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</li>
+          <li><span class="date">19 September 2020</span> Developed fastISM, 10x faster <i>in-silico</i> saturation mutagenesis for convolutional neural networks. Accepted to <a href="https://mlcb.github.io/">MLCB 2020</a> for oral presentation (15% acceptance rate) [<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="https://www.biorxiv.org/content/10.1101/2020.10.13.337147v1">preprint</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</li>
+          <li><span class="date">29 April 2019</span> Our <a href="https://academic.oup.com/bioinformatics/article/35/14/i108/5529138">paper</a> on a predicting chromatin accessibility across cellular contexts was accepted for an oral presentation in <a href="https://www.iscb.org/ismbeccb2019">ISMB 2019</a> [<a href="https://docs.google.com/presentation/d/1fAgKdVDk9MvVxg5IO9M1YfmhcR30ydqpgOpuqL5jscM/edit?usp=sharing">slides</a>] [<a href="https://www.youtube.com/watch?v=LRO3ePMI6j4">talk</a>] [<a href="https://github.com/kundajelab/ChromDragoNN">code</a>]</li>
+          <li><span class="date">29 December 2017</span> <a href="posts/alphazero.html">A Simple Alpha(Go) Zero Tutorial</a></li>
+        </ul>
+      </section>
+    </main>
     
-    <p>Previously, I have interned at <a href="http://www.apple.com">Apple</a> in the Siri team, and developed open-source implementations of interesting machine learning systems such as <a href="https://github.com/suragnair/alpha-zero-general">Alpha Zero</a> and <a href="https://github.com/suragnair/seqGAN">sequence GANs</a>. I received my Bachelors in Electrical Engineering from <a href="http://www.iitd.ac.in">IIT Delhi</a>. 
+    <footer class="page-footer">
+      <p><a href="http://www.cs.berkeley.edu/~barron/">Template</a> <a href="http://jeffdonahue.com/">credits</a></p>
+    </footer>
 
-    </td>
+  </div>
 
-    <td width="33%"><img src="images/Chicago_March_21.jpg" width="90%"></td>
-  </tr>
-</table>
-<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
-    <tr>
-    <td align="justify">
-    <sectionheading>Updates</sectionheading>
-     <p><font color="646464">30 November 2023</font>: I defended my PhD! I'm starting as a Senior ML Scientist at Genentech. [<a href="https://purl.stanford.edu/mz621td1032">thesis</a>]
-    <p><font color="646464">21 October 2023</font>: Our preprint on the single-cell dynamics of fibroblast reprogramming to iPSCs is out! [<a href="https://www.biorxiv.org/content/10.1101/2023.10.04.560808">preprint</a>] [<a href="https://x.com/suragnair/status/1722035473290596627?s=20">tweetorial</a>] [<a href="https://doi.org/10.5281/zenodo.8294147">data</a>] [<a href="https://kundajelab.github.io/reprogramming-browser/home.html">browser</a>] [<a href="https://youtu.be/OwwyAt9yFBo">talk</a>]
-    <p><font color="646464">24 July 2023</font>: Talk at ISMB 2023 about the sensitivity of regulatory DNA models to spurious features [<a href="https://youtu.be/n3UgOHJ-wHQ">talk</a>]
-    <p><font color="646464">14 October 2022</font>: dynseq is published in Nature Genetics! [<a href="http://doi.org/10.1038/s41588-022-01194-w">paper</a>]
-    <p><font color="646464">8 June 2022</font>: dynseq track preprint out, available at UCSC, WashU and HiGlass/Resgen browsers! [<a href="https://www.biorxiv.org/content/10.1101/2022.05.26.493621v2">preprint</a>]
-    <p><font color="646464">8 March 2022</font>: fastISM is published in Bioinformatics! [<a href="https://doi.org/10.1093/bioinformatics/btac135">paper</a>] [<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]
-    <p><font color="646464">19 September 2020</font>: Developed fastISM, 10x faster <i>in-silico</i> saturation mutagenesis for convolutional neural networks. Accepted to <a href="https://mlcb.github.io/">MLCB 2020</a> for oral presentation (15% acceptance rate)  [<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="https://www.biorxiv.org/content/10.1101/2020.10.13.337147v1">preprint</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]
-    <p><font color="646464">29 April 2019</font>: Our <a href="https://academic.oup.com/bioinformatics/article/35/14/i108/5529138">paper</a> on predicting chromatin accessibility across cellular contexts was accepted for an oral presentation in <a href="https://www.iscb.org/ismbeccb2019">ISMB 2019</a> [<a href="https://docs.google.com/presentation/d/1fAgKdVDk9MvVxg5IO9M1YfmhcR30ydqpgOpuqL5jscM/edit?usp=sharing">slides</a>] [<a href="https://www.youtube.com/watch?v=LRO3ePMI6j4">talk</a>] [<a href="https://github.com/kundajelab/ChromDragoNN">code</a>]</p>
-    <p><font color="646464">29 December 2017</font>: <a href="posts/alphazero.html">A Simple Alpha(Go) Zero Tutorial</a></p>
-  </td>
-  </tr>
-</table>
-
-<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
-    <tr>
-        <td width="50%">
-        <p align="left">
-        </p>
-        </td>
-        
-        <td width="50%" valign="middle"><p align="right"><font size="2">
-    Template: <a href="http://www.cs.berkeley.edu/~barron/">all</a> <a href="https://people.eecs.berkeley.edu/~pathak/">these</a> <a href="http://jeffdonahue.com/">guys</a>
-    </font></p></td>
-    </tr>
-</table>
-
-  </td></tr>
-</table>
-<script xml:space="preserve" language="JavaScript">
-hideallbibs();
-</script>
-<!-- ><script xml:space="preserve" language="JavaScript">
-hideblock('jpm15_abs');
-</script> -->
+  <script xml:space="preserve" language="JavaScript">
+    hideallbibs();
+  </script>
 </body>
-
 </html>
-
