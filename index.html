@@ -14,154 +14,140 @@
   <!-- FONT -->
   <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic' rel='stylesheet' type='text/css'>
 
+  <!-- ==================== CORRECTED DARK MODE SCRIPT ==================== -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        // If a theme is saved, apply it
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else {
+        // Otherwise, check system preference and apply it explicitly
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      }
+    })();
+  </script>
+  <!-- ==================================================================== -->
+
   <!-- CSS -->
   <style>
+    /* CSS VARIABLES FOR THEMES */
+    :root {
+      --color-background: #ffffff;
+      --color-text: #333;
+      --color-text-secondary: #646464;
+      --color-border: #eee;
+      --color-link: #1772d0;
+      --color-link-hover: #f09228;
+      --image-filter: grayscale(0%);
+    }
+
+    html[data-theme='dark'] {
+      --color-background: #1e1e1e;
+      --color-text: #e2e2e2;
+      --color-text-secondary: #999;
+      --color-border: #444;
+      --color-link: #58a6ff;
+      --color-link-hover: #f09228;
+      --image-filter: grayscale(20%);
+    }
+
     /* Basic Page Styles */
     body {
       font-family: 'Titillium Web', Verdana, Helvetica, sans-serif;
       font-size: 16px;
       font-weight: 400;
       line-height: 1.6;
-      color: #333;
+      background-color: var(--color-background);
+      color: var(--color-text);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* FIX: Ensure email text color respects the theme */
+    #email, #email a {
+        color: var(--color-text) !important;
     }
 
     /* Links */
     a {
-      color: #1772d0;
+      color: var(--color-link);
       text-decoration: none;
+      transition: color 0.2s ease-in-out;
     }
 
     a:focus,
     a:hover {
-      color: #f09228;
+      color: var(--color-link-hover);
       text-decoration: none;
     }
 
     /* Page Structure */
     .container {
+      position: relative; 
       max-width: 840px;
       margin: 0 auto;
-      /* --- ADJUSTABLE: This now controls the overall content width --- */
-      /* Top, Left/Right, Bottom padding */
-      padding: 20px 350px 40px; 
+      padding: 20px 40px 40px; 
     }
 
     /* Typography */
-    p {
-      margin-top: 0;
-      margin-bottom: 20px;
-    }
-    h1, h2 {
-      font-weight: 600;
-      margin-top: 0;
-    }
-    h1 {
-      /* --- ADJUSTABLE PARAMETER: Title font size --- */
-      font-size: 3.2rem; 
-      
-      font-weight: 400;
-      letter-spacing: -1px;
-      
-      /* --- ADJUSTABLE PARAMETER: Space below title --- */
-      margin-bottom: -3px ; 
-    }
-    .section-heading {
-      font-size: 22px;
-      margin-bottom: 20px;
-    }
-    strong {
-      font-weight: 800;
-    }
+    p { margin-top: 0; margin-bottom: 20px; }
+    h1, h2 { font-weight: 600; margin-top: 0; }
+    h1 { font-size: 3.2rem; font-weight: 400; letter-spacing: -1px; margin-bottom: -3px; }
+    .section-heading { font-size: 22px; margin-bottom: 20px; }
     
     /* Header Section */
-    .page-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .page-header p {
-      line-height: 1.4;
-      margin-bottom: 0;
-    }
-    .social-links {
-      /* --- ADJUSTABLE PARAMETER: Vertical space BETWEEN email and icons --- */
-      margin-top: 15px; 
-    }
+    .page-header { text-align: center; margin-bottom: 40px; }
+    .page-header p { line-height: 1.4; margin-bottom: 0; }
+    .social-links { margin-top: 15px; }
     .social-links .icon-img {
-      /* --- ADJUSTABLE PARAMETER: Icon size --- */
       height: 18px; 
-      
       opacity: 0.7;
-      
-      /* --- ADJUSTABLE PARAMETER: Space between icons --- */
       margin: 0 1px; 
-      
-      transition: opacity 0.2s ease-in-out;
+      transition: opacity 0.2s ease-in-out, filter 0.3s;
+      filter: var(--image-filter) invert(var(--dark-mode-invert, 0));
     }
-    .social-links a:hover .icon-img {
-        opacity: 1.0;
+    html[data-theme='dark'] .social-links .icon-img {
+        --dark-mode-invert: 1; 
     }
+    .social-links a:hover .icon-img { opacity: 1.0; }
 
-    /* Profile Section (Bio + Photo) */
-    .profile-section {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      margin-bottom: 20px;
-    }
-    .profile-text {
-      flex: 1;
-      text-align: justify;
-      /* Padding is now handled by the .container */
-    }
-    .profile-image {
-      flex-basis: 30%;
-    }
-    .profile-image img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
+    /* Profile Section */
+    .profile-section { display: flex; align-items: center; gap: 40px; margin-bottom: 20px; }
+    .profile-text { flex: 1; text-align: justify; }
+    .profile-image { flex-basis: 30%; }
+    .profile-image img { width: 100%; height: auto; border-radius: 8px; transition: filter 0.3s; filter: var(--image-filter); }
 
     /* Updates Section */
-    .updates-list {
-      list-style-type: none;
-      padding-left: 0; /* Changed from padding: 0 20px */
-    }
-    .updates-list li {
-      margin-bottom: 15px;
-    }
-    .updates-list .date {
-      color: #646464;
-      display: inline;
-      margin-right: 8px;
-    }
-    .updates-list .date::after {
-        content: ":";
-    }
+    .updates-list { list-style-type: none; padding-left: 0; }
+    .updates-list li { margin-bottom: 15px; }
+    .updates-list .date { color: var(--color-text-secondary); display: inline; margin-right: 8px; }
+    .updates-list .date::after { content: ":"; }
 
     /* Footer */
-    .page-footer {
-      text-align: right;
-      font-size: 13px;
-      color: #888;
-      margin-top: 40px;
-      border-top: 1px solid #eee;
-      padding-top: 20px;
-    }
+    .page-footer { text-align: right; font-size: 13px; color: var(--color-text-secondary); margin-top: 40px; border-top: 1px solid var(--color-border); padding-top: 20px; transition: border-color 0.3s; }
     
-    /* Responsive Design for Mobile */
+    /* THEME TOGGLE BUTTON STYLE */
+    #theme-toggle {
+        position: absolute;
+        top: 25px;
+        right: 40px;
+        background: none;
+        border: none;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        font-size: 20px;
+        padding: 0;
+        line-height: 1;
+    }
+    #theme-toggle:hover { color: var(--color-link-hover); }
+    
+    /* Responsive Design */
     @media (max-width: 768px) {
-      .container {
-        /* Use less horizontal padding on small screens */
-        padding: 20px 20px 40px;
-      }
-      .profile-section {
-        flex-direction: column;
-        text-align: left;
-      }
-      h1 {
-        font-size: 2.8rem;
-      }
+      .container { padding: 20px 20px 40px; }
+      #theme-toggle { top: 25px; right: 20px; }
+      .profile-section { flex-direction: column; text-align: left; }
+      h1 { font-size: 2.8rem; }
     }
    </style>
 
@@ -181,6 +167,8 @@
 <body>
 
   <div class="container">
+    
+    <button id="theme-toggle" title="Toggle dark/light mode">🌙</button>
 
     <header class="page-header">
       <h1>Surag Nair</h1>
@@ -232,7 +220,7 @@
     </main>
     
     <footer class="page-footer">
-      <p><a href="http://www.cs.berkeley.edu/~barron/">Template</a> <a href="http://jeffdonahue.com/">credits</a></p>
+      <p><a href="http://www.cs.berkeley.edu/~barron/">Template</a> <a href="http://jeffdonahue.com/">credits</a> + <a href="http://gemini.google.com">Gemini</a></p>
     </footer>
 
   </div>
@@ -240,5 +228,42 @@
   <script xml:space="preserve" language="JavaScript">
     hideallbibs();
   </script>
+
+  <!-- ================= CORRECTED THEME TOGGLE SCRIPT ================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggleButton = document.getElementById('theme-toggle');
+      const docElement = document.documentElement;
+
+      // This function updates the button icon and saves the theme if manually set
+      function setTheme(theme) {
+        docElement.setAttribute('data-theme', theme);
+        toggleButton.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+      }
+
+      // Set initial icon based on the theme already applied by the head script
+      const initialTheme = docElement.getAttribute('data-theme');
+      toggleButton.innerHTML = initialTheme === 'dark' ? '☀️' : '🌙';
+
+      // Button click listener to manually override the theme
+      toggleButton.addEventListener('click', function() {
+        const currentTheme = docElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme); // Save user's choice
+        setTheme(newTheme);
+      });
+
+      // Listen for changes in system preference
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        // ONLY apply system setting if user has NOT made a manual choice
+        if (!localStorage.getItem('theme')) {
+          const newTheme = e.matches ? 'dark' : 'light';
+          setTheme(newTheme);
+        }
+      });
+    });
+  </script>
+  <!-- ==================================================================== -->
+
 </body>
 </html>
