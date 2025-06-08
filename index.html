@@ -17,15 +17,9 @@
   <!-- ==================== CORRECTED DARK MODE SCRIPT ==================== -->
   <script>
     (function() {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) {
-        // If a theme is saved, apply it
-        document.documentElement.setAttribute('data-theme', savedTheme);
-      } else {
-        // Otherwise, check system preference and apply it explicitly
+        // check system preference and apply it explicitly
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-      }
     })();
   </script>
   <!-- ==================================================================== -->
@@ -254,17 +248,13 @@
       toggleButton.addEventListener('click', function() {
         const currentTheme = docElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        localStorage.setItem('theme', newTheme); // Save user's choice
         setTheme(newTheme);
       });
 
       // Listen for changes in system preference
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        // ONLY apply system setting if user has NOT made a manual choice
-        if (!localStorage.getItem('theme')) {
-          const newTheme = e.matches ? 'dark' : 'light';
-          setTheme(newTheme);
-        }
+        const newTheme = e.matches ? 'dark' : 'light';
+        setTheme(newTheme);
       });
     });
   </script>
