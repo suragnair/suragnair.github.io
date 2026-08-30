@@ -34,6 +34,7 @@
       --color-border: #eee;
       --color-link: #1772d0;
       --color-link-hover: #f09228;
+      --color-timeline-dot: #8b8b8b;
       --image-filter: grayscale(0%);
     }
 
@@ -44,6 +45,7 @@
       --color-border: #444;
       --color-link: #58a6ff;
       --color-link-hover: #f09228;
+      --color-timeline-dot: #999;
       --image-filter: grayscale(20%);
     }
 
@@ -124,22 +126,37 @@
     /* THEME TOGGLE BUTTON STYLE */
     #theme-toggle {
         position: absolute;
-        top: 25px;
+        top: 20px;
         right: 40px;
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
         background: none;
-        border: none;
+        border: 1px solid var(--color-border);
+        border-radius: 50%;
         color: var(--color-text-secondary);
         cursor: pointer;
-        font-size: 20px;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 18px;
         padding: 0;
         line-height: 1;
+        transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.2s ease-in-out;
     }
-    #theme-toggle:hover { color: var(--color-link-hover); }
+    #theme-toggle:hover {
+      border-color: var(--color-link);
+      color: var(--color-link);
+      transform: rotate(8deg);
+    }
+    #theme-toggle:focus-visible {
+      outline: 2px solid var(--color-link);
+      outline-offset: 3px;
+    }
     
     /* Responsive Design */
     @media (max-width: 768px) {
       .container { padding: 20px 20px 40px; }
-      #theme-toggle { top: 25px; right: 20px; }
+      #theme-toggle { top: 20px; right: 20px; }
       .profile-section { flex-direction: column-reverse; text-align: left; }
       h1 { font-size: 2.8rem; }
       .profile-image {
@@ -147,6 +164,151 @@
            max-width: 250px; /* Prevents it from getting too large on tablets */
            margin: 0 auto 0px; /* Centers the image and adds space below it */
          }
+    }
+
+    /* Minimal layout refinements */
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      line-height: 1.62;
+    }
+
+    .container {
+      max-width: 880px;
+      padding: 28px 36px 44px;
+    }
+
+    .page-header { margin-bottom: 44px; }
+    .social-links { margin-top: 16px; }
+    .social-links a {
+      display: inline-block;
+      padding: 3px 2px;
+    }
+    .social-links .icon-img {
+      height: 19px;
+      margin: 0 2px;
+    }
+
+    .profile-section {
+      gap: 36px;
+      margin-bottom: 12px;
+    }
+    .profile-text {
+      text-align: left;
+    }
+    .profile-image {
+      flex-basis: 29%;
+    }
+    .profile-image img {
+      border-radius: 10px;
+    }
+
+    .section-heading {
+      margin-bottom: 16px;
+    }
+    .updates-list li {
+      margin-bottom: 14px;
+      line-height: 1.55;
+    }
+    .updates-list .date {
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .profile-text a,
+    .updates-list a {
+      text-decoration: underline;
+      text-decoration-color: color-mix(in srgb, currentColor 24%, transparent);
+      text-underline-offset: 2px;
+    }
+    .profile-text a:hover,
+    .updates-list a:hover {
+      text-decoration-color: currentColor;
+    }
+
+    .page-footer {
+      margin-top: 48px;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 20px 22px 36px; }
+      .page-header { margin-bottom: 36px; }
+      .profile-section {
+        gap: 28px;
+        margin-bottom: 12px;
+      }
+      .profile-image {
+        width: 52%;
+        max-width: 220px;
+      }
+    }
+
+    /* Updates timeline */
+    .updates-list {
+      --timeline-axis: 5px;
+      --timeline-gutter: 30px;
+      position: relative;
+      margin: 0;
+      padding: 2px 0 0 var(--timeline-gutter);
+    }
+
+    .updates-list::before {
+      position: absolute;
+      top: 9px;
+      bottom: 36px;
+      left: var(--timeline-axis);
+      width: 1px;
+      background: var(--color-border);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .updates-list li {
+      position: relative;
+      margin: 0 0 19px;
+      line-height: 1.5;
+    }
+
+    .updates-list li::before {
+      position: absolute;
+      top: 5px;
+      left: calc(var(--timeline-axis) - var(--timeline-gutter));
+      width: 8px;
+      height: 8px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--color-timeline-dot);
+      box-shadow:
+        0 0 0 2px var(--color-background),
+        0 0 0 3px var(--color-border);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .updates-list .date {
+      display: block;
+      margin: 0 0 3px;
+      color: var(--color-text-secondary);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      line-height: 18px;
+    }
+
+    .updates-list .date::after {
+      content: "";
+    }
+
+    .updates-list .update-links {
+      display: block;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .updates-list {
+        --timeline-gutter: 24px;
+      }
     }
    </style>
 
@@ -167,7 +329,9 @@
 
   <div class="container">
     
-    <button id="theme-toggle" title="Toggle dark/light mode">🌙</button>
+    <button id="theme-toggle" type="button" title="Toggle dark/light mode" aria-label="Use dark mode" aria-pressed="false">
+      <span aria-hidden="true">&#x263E;&#xFE0E;</span>
+    </button>
 
     <header class="page-header">
       <h1>Surag Nair</h1>
@@ -204,25 +368,25 @@
       <section id="updates">
         <h2 class="section-heading">Updates</h2>
         <ul class="updates-list">
-          <li><span class="date">9 Apr 2026</span> We released CompBioBench: 100 diverse, challenging, and verifiable questions for agents for computational biology. [<a href="https://www.biorxiv.org/content/10.64898/2026.04.06.716850">preprint</a>] [<a href="https://doi.org/10.5281/zenodo.19443186">data+questions</a>] [<a href="https://huggingface.co/spaces/Genentech/compbiobench-leaderboard-v1">leaderboard</a>]</li>
+          <li><span class="date">9 Apr 2026</span> We released CompBioBench: 100 diverse, challenging, and verifiable questions for agents for computational biology.<span class="update-links">[<a href="https://www.biorxiv.org/content/10.64898/2026.04.06.716850">preprint</a>] [<a href="https://doi.org/10.5281/zenodo.19443186">data+questions</a>] [<a href="https://huggingface.co/spaces/Genentech/compbiobench-leaderboard-v1">leaderboard</a>]</span></li>
           <li><span class="date">18 Nov 2025</span> Our preprint "Nona: A unifying multimodal masking framework for functional genomics" is out! [<a href="https://www.biorxiv.org/content/biorxiv/early/2025/11/18/2025.11.06.687036">preprint</a>]</li>  
           <li><span class="date">25 July 2025</span> Our talk on Nona at the RegSys session in ISMB won the <a href="https://www.iscb.org/documents/resources/resource.ClosingCeremony.ISMBECCB.2025.pdf">Best Talk award</a>!</li>
           <li><span class="date">2 April 2025</span> Presented a preview of our multimodal masking model Nona at Broad MIA. [<a href="https://www.youtube.com/watch?v=l14Fq1UGQ34">talk</a>]</li>
           <li><span class="date">30 November 2023</span> I defended my PhD! I'm starting as a Senior ML Scientist at Genentech. [<a href="https://purl.stanford.edu/mz621td1032">thesis</a>]</li>
-          <li><span class="date">21 October 2023</span> Our preprint on the single-cell dynamics of fibroblast reprogramming to iPSCs is out! [<a href="https://www.biorxiv.org/content/10.1101/2023.10.04.560808">preprint</a>] [<a href="https://x.com/suragnair/status/1722035473290596627?s=20">tweetorial</a>] [<a href="https://doi.org/10.5281/zenodo.8294147">data</a>] [<a href="https://kundajelab.github.io/reprogramming-browser/home.html">browser</a>] [<a href="https://youtu.be/OwwyAt9yFBo">talk</a>]</li>
+          <li><span class="date">21 October 2023</span> Our preprint on the single-cell dynamics of fibroblast reprogramming to iPSCs is out!<span class="update-links">[<a href="https://www.biorxiv.org/content/10.1101/2023.10.04.560808">preprint</a>] [<a href="https://x.com/suragnair/status/1722035473290596627?s=20">tweetorial</a>] [<a href="https://doi.org/10.5281/zenodo.8294147">data</a>] [<a href="https://kundajelab.github.io/reprogramming-browser/home.html">browser</a>] [<a href="https://youtu.be/OwwyAt9yFBo">talk</a>]</span></li>
           <li><span class="date">24 July 2023</span> Talk at ISMB 2023 about the sensitivity of regulatory DNA models to spurious features [<a href="https://youtu.be/n3UgOHJ-wHQ">talk</a>]</li>
           <li><span class="date">14 October 2022</span> dynseq is published in Nature Genetics! [<a href="http://doi.org/10.1038/s41588-022-01194-w">paper</a>]</li>
           <li><span class="date">8 June 2022</span> dynseq track preprint out, available at UCSC, WashU and HiGlass/Resgen browsers! [<a href="https://www.biorxiv.org/content/10.1101/2022.05.26.493621v2">preprint</a>]</li>
-          <li><span class="date">8 March 2022</span> fastISM is published in Bioinformatics! [<a href="https://doi.org/10.1093/bioinformatics/btac135">paper</a>] [<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</li>
-          <li><span class="date">19 September 2020</span> Developed fastISM, 10x faster <i>in-silico</i> saturation mutagenesis for convolutional neural networks. Accepted to <a href="https://mlcb.github.io/">MLCB 2020</a> for oral presentation (15% acceptance rate) [<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="https://www.biorxiv.org/content/10.1101/2020.10.13.337147v1">preprint</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</li>
-          <li><span class="date">29 April 2019</span> Our <a href="https://academic.oup.com/bioinformatics/article/35/14/i108/5529138">paper</a> on a predicting chromatin accessibility across cellular contexts was accepted for an oral presentation in <a href="https://www.iscb.org/ismbeccb2019">ISMB 2019</a> [<a href="https://docs.google.com/presentation/d/1fAgKdVDk9MvVxg5IO9M1YfmhcR30ydqpgOpuqL5jscM/edit?usp=sharing">slides</a>] [<a href="https://www.youtube.com/watch?v=LRO3ePMI6j4">talk</a>] [<a href="https://github.com/kundajelab/ChromDragoNN">code</a>]</li>
+          <li><span class="date">8 March 2022</span> fastISM is published in Bioinformatics!<span class="update-links">[<a href="https://doi.org/10.1093/bioinformatics/btac135">paper</a>] [<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</span></li>
+          <li><span class="date">19 September 2020</span> Developed fastISM, 10x faster <i>in-silico</i> saturation mutagenesis for convolutional neural networks. Accepted to <a href="https://mlcb.github.io/">MLCB 2020</a> for oral presentation (15% acceptance rate)<span class="update-links">[<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="https://www.biorxiv.org/content/10.1101/2020.10.13.337147v1">preprint</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</span></li>
+          <li><span class="date">29 April 2019</span> Our <a href="https://academic.oup.com/bioinformatics/article/35/14/i108/5529138">paper</a> on a predicting chromatin accessibility across cellular contexts was accepted for an oral presentation in <a href="https://www.iscb.org/ismbeccb2019">ISMB 2019</a><span class="update-links">[<a href="https://docs.google.com/presentation/d/1fAgKdVDk9MvVxg5IO9M1YfmhcR30ydqpgOpuqL5jscM/edit?usp=sharing">slides</a>] [<a href="https://www.youtube.com/watch?v=LRO3ePMI6j4">talk</a>] [<a href="https://github.com/kundajelab/ChromDragoNN">code</a>]</span></li>
           <li><span class="date">29 December 2017</span> <a href="posts/alphazero.html">A Simple Alpha(Go) Zero Tutorial</a></li>
         </ul>
       </section>
     </main>
     
     <footer class="page-footer">
-      <p><a href="http://www.cs.berkeley.edu/~barron/">Template</a> <a href="http://jeffdonahue.com/">credits</a> + <a href="http://gemini.google.com">Gemini</a></p>
+      <p><a href="http://www.cs.berkeley.edu/~barron/">Template</a> <a href="http://jeffdonahue.com/">credits</a></p>
     </footer>
 
   </div>
@@ -235,17 +399,21 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const toggleButton = document.getElementById('theme-toggle');
+      const toggleIcon = toggleButton.querySelector('span');
       const docElement = document.documentElement;
 
-      // This function updates the button icon and saves the theme if manually set
+      // Update the theme, icon, and accessible state together.
       function setTheme(theme) {
         docElement.setAttribute('data-theme', theme);
-        toggleButton.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        const isDark = theme === 'dark';
+        toggleIcon.textContent = isDark ? '\u263c\ufe0e' : '\u263e\ufe0e';
+        toggleButton.setAttribute('aria-label', isDark ? 'Use light mode' : 'Use dark mode');
+        toggleButton.setAttribute('aria-pressed', String(isDark));
       }
 
       // Set initial icon based on the theme already applied by the head script
       const initialTheme = docElement.getAttribute('data-theme');
-      toggleButton.innerHTML = initialTheme === 'dark' ? '☀️' : '🌙';
+      setTheme(initialTheme);
 
       // Button click listener to manually override the theme
       toggleButton.addEventListener('click', function() {
