@@ -35,6 +35,9 @@
       --color-link: #1772d0;
       --color-link-hover: #f09228;
       --color-timeline-dot: #8b8b8b;
+      --color-timeline-dot-hover: color-mix(in srgb, var(--color-link) 30%, var(--color-timeline-dot));
+      --color-timeline-ring-hover: color-mix(in srgb, var(--color-link) 30%, var(--color-border));
+      --color-timeline-halo-hover: color-mix(in srgb, var(--color-link) 9%, transparent);
       --image-filter: grayscale(0%);
     }
 
@@ -46,6 +49,9 @@
       --color-link: #58a6ff;
       --color-link-hover: #f09228;
       --color-timeline-dot: #999;
+      --color-timeline-dot-hover: color-mix(in srgb, var(--color-link) 38%, var(--color-timeline-dot));
+      --color-timeline-ring-hover: color-mix(in srgb, var(--color-link) 38%, var(--color-border));
+      --color-timeline-halo-hover: color-mix(in srgb, var(--color-link) 11%, transparent);
       --image-filter: grayscale(20%);
     }
 
@@ -277,12 +283,22 @@
       height: 8px;
       border: 0;
       border-radius: 50%;
-      background: var(--color-timeline-dot);
+      background-color: var(--color-timeline-dot);
       box-shadow:
         0 0 0 2px var(--color-background),
         0 0 0 3px var(--color-border);
       content: "";
       transform: translateX(-50%);
+      transition: background-color 220ms ease, box-shadow 220ms ease;
+    }
+
+    .updates-list li:hover::before,
+    .updates-list li:focus-within::before {
+      background-color: var(--color-timeline-dot-hover);
+      box-shadow:
+        0 0 0 2px var(--color-background),
+        0 0 0 3px var(--color-timeline-ring-hover),
+        0 0 0 7px var(--color-timeline-halo-hover);
     }
 
     .updates-list .date {
@@ -308,6 +324,12 @@
     @media (max-width: 768px) {
       .updates-list {
         --timeline-gutter: 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .updates-list li::before {
+        transition: none;
       }
     }
    </style>
