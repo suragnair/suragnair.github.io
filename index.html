@@ -223,12 +223,15 @@
     }
     .profile-text a,
     .updates-list a {
+      transition: color 200ms ease-in-out, text-decoration-color 200ms ease-in-out;
       text-decoration: underline;
       text-decoration-color: color-mix(in srgb, currentColor 24%, transparent);
       text-underline-offset: 2px;
     }
     .profile-text a:hover,
-    .updates-list a:hover {
+    .updates-list a:hover,
+    .profile-text a:focus-visible,
+    .updates-list a:focus-visible {
       text-decoration-color: currentColor;
     }
 
@@ -328,7 +331,9 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .updates-list li::before {
+      .updates-list li::before,
+      .profile-text a,
+      .updates-list a {
         transition: none;
       }
     }
@@ -392,17 +397,17 @@
         <ul class="updates-list">
           <li><span class="date">9 Apr 2026</span> We released CompBioBench: 100 diverse, challenging, and verifiable questions for agents for computational biology.<span class="update-links">[<a href="https://www.biorxiv.org/content/10.64898/2026.04.06.716850">preprint</a>] [<a href="https://doi.org/10.5281/zenodo.19443186">data+questions</a>] [<a href="https://huggingface.co/spaces/Genentech/compbiobench-leaderboard-v1">leaderboard</a>]</span></li>
           <li><span class="date">18 Nov 2025</span> Our preprint "Nona: A unifying multimodal masking framework for functional genomics" is out! [<a href="https://www.biorxiv.org/content/biorxiv/early/2025/11/18/2025.11.06.687036">preprint</a>]</li>  
-          <li><span class="date">25 July 2025</span> Our talk on Nona at the RegSys session in ISMB won the <a href="https://www.iscb.org/documents/resources/resource.ClosingCeremony.ISMBECCB.2025.pdf">Best Talk award</a>!</li>
-          <li><span class="date">2 April 2025</span> Presented a preview of our multimodal masking model Nona at Broad MIA. [<a href="https://www.youtube.com/watch?v=l14Fq1UGQ34">talk</a>]</li>
-          <li><span class="date">30 November 2023</span> I defended my PhD! I'm starting as a Senior ML Scientist at Genentech. [<a href="https://purl.stanford.edu/mz621td1032">thesis</a>]</li>
-          <li><span class="date">21 October 2023</span> Our preprint on the single-cell dynamics of fibroblast reprogramming to iPSCs is out!<span class="update-links">[<a href="https://www.biorxiv.org/content/10.1101/2023.10.04.560808">preprint</a>] [<a href="https://x.com/suragnair/status/1722035473290596627?s=20">tweetorial</a>] [<a href="https://doi.org/10.5281/zenodo.8294147">data</a>] [<a href="https://kundajelab.github.io/reprogramming-browser/home.html">browser</a>] [<a href="https://youtu.be/OwwyAt9yFBo">talk</a>]</span></li>
-          <li><span class="date">24 July 2023</span> Talk at ISMB 2023 about the sensitivity of regulatory DNA models to spurious features [<a href="https://youtu.be/n3UgOHJ-wHQ">talk</a>]</li>
-          <li><span class="date">14 October 2022</span> dynseq is published in Nature Genetics! [<a href="http://doi.org/10.1038/s41588-022-01194-w">paper</a>]</li>
-          <li><span class="date">8 June 2022</span> dynseq track preprint out, available at UCSC, WashU and HiGlass/Resgen browsers! [<a href="https://www.biorxiv.org/content/10.1101/2022.05.26.493621v2">preprint</a>]</li>
-          <li><span class="date">8 March 2022</span> fastISM is published in Bioinformatics!<span class="update-links">[<a href="https://doi.org/10.1093/bioinformatics/btac135">paper</a>] [<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</span></li>
-          <li><span class="date">19 September 2020</span> Developed fastISM, 10x faster <i>in-silico</i> saturation mutagenesis for convolutional neural networks. Accepted to <a href="https://mlcb.github.io/">MLCB 2020</a> for oral presentation (15% acceptance rate)<span class="update-links">[<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="https://www.biorxiv.org/content/10.1101/2020.10.13.337147v1">preprint</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</span></li>
-          <li><span class="date">29 April 2019</span> Our <a href="https://academic.oup.com/bioinformatics/article/35/14/i108/5529138">paper</a> on a predicting chromatin accessibility across cellular contexts was accepted for an oral presentation in <a href="https://www.iscb.org/ismbeccb2019">ISMB 2019</a><span class="update-links">[<a href="https://docs.google.com/presentation/d/1fAgKdVDk9MvVxg5IO9M1YfmhcR30ydqpgOpuqL5jscM/edit?usp=sharing">slides</a>] [<a href="https://www.youtube.com/watch?v=LRO3ePMI6j4">talk</a>] [<a href="https://github.com/kundajelab/ChromDragoNN">code</a>]</span></li>
-          <li><span class="date">29 December 2017</span> <a href="posts/alphazero.html">A Simple Alpha(Go) Zero Tutorial</a></li>
+          <li><span class="date">25 Jul 2025</span> Our talk on Nona at the RegSys session in ISMB won the <a href="https://www.iscb.org/documents/resources/resource.ClosingCeremony.ISMBECCB.2025.pdf">Best Talk award</a>!</li>
+          <li><span class="date">2 Apr 2025</span> Presented a preview of our multimodal masking model Nona at Broad MIA. [<a href="https://www.youtube.com/watch?v=l14Fq1UGQ34">talk</a>]</li>
+          <li><span class="date">30 Nov 2023</span> I defended my PhD! I'm starting as a Senior ML Scientist at Genentech. [<a href="https://purl.stanford.edu/mz621td1032">thesis</a>]</li>
+          <li><span class="date">21 Oct 2023</span> Our preprint on the single-cell dynamics of fibroblast reprogramming to iPSCs is out!<span class="update-links">[<a href="https://www.biorxiv.org/content/10.1101/2023.10.04.560808">preprint</a>] [<a href="https://x.com/suragnair/status/1722035473290596627?s=20">tweetorial</a>] [<a href="https://doi.org/10.5281/zenodo.8294147">data</a>] [<a href="https://kundajelab.github.io/reprogramming-browser/home.html">browser</a>] [<a href="https://youtu.be/OwwyAt9yFBo">talk</a>]</span></li>
+          <li><span class="date">24 Jul 2023</span> Talk at ISMB 2023 about the sensitivity of regulatory DNA models to spurious features [<a href="https://youtu.be/n3UgOHJ-wHQ">talk</a>]</li>
+          <li><span class="date">14 Oct 2022</span> dynseq is published in Nature Genetics! [<a href="http://doi.org/10.1038/s41588-022-01194-w">paper</a>]</li>
+          <li><span class="date">8 Jun 2022</span> dynseq track preprint out, available at UCSC, WashU and HiGlass/Resgen browsers! [<a href="https://www.biorxiv.org/content/10.1101/2022.05.26.493621v2">preprint</a>]</li>
+          <li><span class="date">8 Mar 2022</span> fastISM is published in Bioinformatics!<span class="update-links">[<a href="https://doi.org/10.1093/bioinformatics/btac135">paper</a>] [<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</span></li>
+          <li><span class="date">19 Sep 2020</span> Developed fastISM, 10x faster <i>in-silico</i> saturation mutagenesis for convolutional neural networks. Accepted to <a href="https://mlcb.github.io/">MLCB 2020</a> for oral presentation (15% acceptance rate)<span class="update-links">[<a href="https://github.com/kundajelab/fastISM">code</a>] [<a href="https://fastism.readthedocs.io/en/latest/?badge=latest">docs</a>] [<a href="https://www.biorxiv.org/content/10.1101/2020.10.13.337147v1">preprint</a>] [<a href="./slides/fastISM.MLCB.2020.key">slides</a>] [<a href="https://youtu.be/8co5_aqBwGQ?t=5113">talk</a>]</span></li>
+          <li><span class="date">29 Apr 2019</span> Our <a href="https://academic.oup.com/bioinformatics/article/35/14/i108/5529138">paper</a> on a predicting chromatin accessibility across cellular contexts was accepted for an oral presentation in <a href="https://www.iscb.org/ismbeccb2019">ISMB 2019</a><span class="update-links">[<a href="https://docs.google.com/presentation/d/1fAgKdVDk9MvVxg5IO9M1YfmhcR30ydqpgOpuqL5jscM/edit?usp=sharing">slides</a>] [<a href="https://www.youtube.com/watch?v=LRO3ePMI6j4">talk</a>] [<a href="https://github.com/kundajelab/ChromDragoNN">code</a>]</span></li>
+          <li><span class="date">29 Dec 2017</span> <a href="posts/alphazero.html">A Simple Alpha(Go) Zero Tutorial</a></li>
         </ul>
       </section>
     </main>
